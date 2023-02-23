@@ -1,0 +1,1 @@
+Now that we’ve learned about the Serializable interface and how to implement it, let’s take a look at how to serialize an object to a file. To do this we’ll need to use the helper classes, FileOutputStream, which will help us write to a file, and ObjectOutputStream, which will help us write a serializable object to an output stream.
