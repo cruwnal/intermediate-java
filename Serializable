@@ -1,0 +1,16 @@
+We need to provide the JVM with a unique identifier when converting a serialized stream of bytes back into an object with a serialVersionUID. Add a private static final long to the Car class named serialVersionUID with a value of 1L.
+
+import java.io.Serializable;
+
+public class Car implements Serializable {
+private String make;
+private int year;
+/* We need to provide the JVM with a unique identifier when converting a serialized stream of bytes back into an object with a serialVersionUID. Add a private static final long to the Car class named serialVersionUID with a value of 1L.*/
+private static final long serialVersionUID = 1L;
+
+public Car (String make, int year){
+   this.make = make;
+   this.year = year;
+}
+
+}
