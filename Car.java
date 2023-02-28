@@ -1,3 +1,5 @@
+package com.kunal.access;
+
 import java.io.Serializable;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
@@ -10,21 +12,37 @@ public class Car implements Serializable {
     private String make;
     private int year;
     private static final long serialVersionUID = 1L;
-    private transient String model;
+    private Engine engine;
 
-    public Car(String make, int year, String model) {
+    public Car(String make, int year) {
         this.make = make;
         this.year = year;
-        this.model = model;
+        this.engine = new Engine(2.4, 6);
     }
 
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(this.make);
+        stream.writeInt(this.year);
+        stream.writeDouble(this.engine.getLiters());
+        stream.writeInt(this.engine.getCylinders());
+    }
+
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        this.make = (String) stream.readObject();
+        this.year = (int) stream.readInt();
+        double liters = (double) stream.readDouble();
+        int cylinders = (int) stream.readInt();
+        this.engine = new Engine(liters, cylinders);
+    }
+
+
     public String toString(){
-        return String.format("Car make is: %s, Car year is: %d, Car model is: %s, serialVersionUID: %d", this.make, this.year, this.model, serialVersionUID);
+        return String.format("Car make is: %s, Car year is: %d, %s", this.make, this.year, this.engine);
     }
 
     public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
-        Car toyota = new Car("Toyota", 2021, "Corolla");
-        Car honda = new Car("Honda", 2020, "Civic");
+        Car toyota = new Car("Toyota", 2021);
+        Car honda = new Car("Honda", 2020);
         FileOutputStream fileOutputStream = new FileOutputStream("cars.txt");
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(toyota);
@@ -37,8 +55,8 @@ public class Car implements Serializable {
         Car hondaCopy = (Car) objectInputStream.readObject();
 
         boolean isSameObject = toyotaCopy == toyota;
-        System.out.println("Toyota (Copy) - "+ toyotaCopy);
-        System.out.println("Toyota (Original) - "+ toyota);
+        System.out.println("Toyota (Copy) - "+toyotaCopy);
+        System.out.println("Toyota (Original) - "+toyota);
         System.out.println("Is same object: "+ isSameObject);
     }
 }
